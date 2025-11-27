@@ -3,9 +3,10 @@ cmake_minimum_required(VERSION 4.0)
 project(opengl_sandbox VERSION 0.1.0 LANGUAGES CXX)
 
 find_package(glfw3 3.3 REQUIRED)
+find_package(assimp CONFIG REQUIRED)
 
-file(CREATE_LINK ${CMAKE_SOURCE_DIR}/shaders shaders SYMBOLIC)
-file(CREATE_LINK ${CMAKE_SOURCE_DIR}/assets assets SYMBOLIC)
+file(CREATE_LINK ${CMAKE_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/shaders SYMBOLIC)
+file(CREATE_LINK ${CMAKE_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR}/assets SYMBOLIC)
 
 add_executable(${PROJECT_NAME})
 add_subdirectory(assets)
@@ -15,6 +16,7 @@ add_subdirectory(src)
 
 target_link_libraries(
 	${PROJECT_NAME} PRIVATE
+	assimp
 	glad
 	glm::glm-header-only
 	glfw
