@@ -28,7 +28,7 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 target_compile_options(
 	${PROJECT_NAME} PRIVATE
 	-pedantic-errors -Wall -Wextra -Wconversion -Wsign-conversion -Werror
-	$<$<CONFIG:Debug>:-Og -ggdb>
+	$<$<CONFIG:Debug>:-O0 -ggdb>
 	$<$<CONFIG:Release>:-O2 -DNDEBUG>
 )
 

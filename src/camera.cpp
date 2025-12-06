@@ -10,9 +10,6 @@ constexpr f64 ZOOM_SPEED{ 500.0 };
 
 void init_camera() {
 
-	GLFWwindow* window{ game_state.window };
-	Vector2 window_center{ input_state.mouse.lock_position };
-
 	camera = Camera{
 	.position = Vector3{0.0, 0.0, 3.0},
 	.right = Vector3{ 1.0,  0.0,  0.0 },
@@ -22,9 +19,6 @@ void init_camera() {
 	.yaw = -90.0,
 	.zoom = 45.0,
 	};
-
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPos(window, window_center.x, window_center.y);
 }
 
 void camera_process_movement(GLFWwindow* window) {
@@ -73,7 +67,10 @@ void camera_process_movement(GLFWwindow* window) {
 	camera.front = glm::normalize(camera.front);
 
 	camera.right = glm::cross(camera.front, Direction3::UP);
+	camera.right = glm::normalize(camera.right);
+
 	camera.up = glm::cross(camera.right, camera.front);
+	camera.up = glm::normalize(camera.up);
 
 	// zoom
 	camera.zoom -= input_state.mouse.scroll_offset.y * (ZOOM_SPEED * delta_time);
@@ -85,6 +82,7 @@ void camera_process_movement(GLFWwindow* window) {
 		camera.zoom = 45.0;
 	}
 }
+
 
 Matrix4f camera_get_view_matrix() {
 	return glm::lookAt(

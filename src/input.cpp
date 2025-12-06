@@ -5,6 +5,9 @@
 
 #include <GLFW/glfw3.h>
 
+#include<iostream>//delete
+
+static void cursor_position_callback([[maybe_unused]] GLFWwindow* window, double x, double y);
 static void scroll_callback([[maybe_unused]] GLFWwindow* window, double x_offset, double y_offset);
 
 void init_input() {
@@ -20,6 +23,9 @@ void init_input() {
 		}
 	};
 
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	glfwSetCursorPosCallback(window, cursor_position_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 }
 
@@ -28,7 +34,6 @@ void input() {
 	glfwPollEvents();
 
 	GLFWwindow* window = game_state.window;
-	glfwGetCursorPos(window, &input_state.mouse.current_position.x, &input_state.mouse.current_position.y);
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
@@ -42,6 +47,11 @@ void input() {
 	// reseting scroll offset, since scroll_callback wont be called if no scrolling is occurring 
 	input_state.mouse.scroll_offset.x = 0.0;
 	input_state.mouse.scroll_offset.y = 0.0;
+}
+
+static void cursor_position_callback([[maybe_unused]] GLFWwindow* window, double x, double y) {
+	input_state.mouse.current_position.x = x;
+	input_state.mouse.current_position.y = y;
 }
 
 static void scroll_callback([[maybe_unused]] GLFWwindow* window, double x_offset, double y_offset) {
